@@ -19,12 +19,12 @@ html,body{
 .form{
 	background-color: #fff;
 	max-width:90%;
-	margin-top: 2rem;
+	margin-top: 0.5rem;
 	border-top-left-radius: 1rem;
 	border-top-right-radius: 1rem;
 	border-bottom-left-radius: 1rem;
 	border-bottom-right-radius: 1rem;
-	padding:2rem;
+	padding:1rem 2rem;
 }
 
 @media screen and (min-width:1000px){
@@ -32,5 +32,9 @@ html,body{
 		background-color: #fff;
 		max-width: 50%;
 	}
+}
+
+.login-form{
+	margin-top: 10%;
 }
 
