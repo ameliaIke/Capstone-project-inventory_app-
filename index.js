@@ -34,14 +34,14 @@ app.get('/', (req, res)=>{
 app.get('/register', (req,res) =>{
 	res.status(200);
 	res.render(`pages/register`);
-	res.end();
+	// res.end();
 })
 
 //To Login
 app.get('/login', (req,res)=>{
 	res.status(200);
-	res.render(`pages/login`);
-	res.end();
+	res.render("pages/login");
+	// res.end();
 })
 
 //To submit registered page
@@ -68,8 +68,8 @@ app.post('/register', async(req,res) =>{
 
 			const registered = await registerUser.save();
 			res.status(201);
-			res.render('pages/login');
-			res.end();
+			res.render("pages/login");
+			// res.end();
 		}else{
 			const script = `<script>alert("Both passwords do not match"); window.location.href = "/register"</script>`;
 			res.send(script);
