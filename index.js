@@ -72,7 +72,7 @@ app.post('/register', async(req,res) =>{
 
 			const registered = await registerUser.save();
 			res.status(201);
-			res.render("pages/login");
+			res.send(req.body.Firstname);
 			res.end();
 		}else{
 			const script = `<script>alert("Both passwords do not match"); window.location.href = "/register"</script>`;
@@ -82,9 +82,7 @@ app.post('/register', async(req,res) =>{
 		res.status(400);
 		res.send(error);
 	}
-
-	
-})
+});
 const PORT = process.env.PORT || 3030;
 app.listen(PORT, ()=>{
 	console.log(`APP is listening on port ${PORT}!`);
