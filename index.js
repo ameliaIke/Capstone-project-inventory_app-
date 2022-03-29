@@ -24,8 +24,10 @@ main().catch(err =>{
 });
 
 async function main(){
-	await mongoose.connect('mongodb://localhost:27017/purchaseDB', 
-		{useNewUrlParser: true, useUnifiedTopology:true}
+  await mongoose.connect('mongodb+srv://dbUser1:MNbv0987@cluster0.fvgoc.mongodb.net/PurchaseStore?retryWrites=true&w=majority',
+		{useNewUrlParser: true, useUnifiedTopology: true}, () => {
+			console.log("connected");
+		}
 )};
 
 app.get('/', (req, res)=>{
@@ -50,39 +52,74 @@ app.get('/login', (req,res)=>{
 
 //To submit registered page
 app.post('/register', async(req,res) =>{
-	try{
-		const password = req.body.Password;
-		const cpassword = req.body.ConfirmPassword;
+        try{
+                const password = req.body.Password;
+                const cpassword = req.body.ConfirmPassword;
+		const email = req.body.Email;
+		const usedemail = User.findOne({Email: email});
+                
 		if(password === cpassword){
+			if(email === usedemail){
+				const script = `<script>alert("Email has already been used"); window.location.href="/register"</script>`;
+				res.send(script);
+			}else{
+				const registerUser = new User({
+					Firstname : req.body.Firstname,
+					Lastname : req.body.Lastname,
+					Email : email,
+					PhoneNumber : req.body.Phonenumber,
+					Gender : req.body.Gender,
+					DOB : req.body.DOB,
+					Address: req.body.Address,
+					City: req.body.City,
+					State: req.body.State,
+					Country: req.body.Country,
+					Password: password,
+					ConfirmPassword : cpassword
+				});
 
-			const registerUser = new User({
-				Firstname : req.body.Firstname,
-				Lastname : req.body.Lastname,
-				Email : req.body.Email,
-				PhoneNumber : req.body.PhoneNumber,
-				Gender : req.body.Gender,
-				DOB : req.body.DOB,
-				Address: req.body.Address,
-				City: req.body.City,
-				State: req.body.State,
-				Country: req.body.Country,
-				Password: password,
-				ConfirmPassword : cpassword
-			});
+				const registered = await registerUser.save();
+				res.status(201);
+				res.render(`pages/login`);
+				res.end();  
+			}   
+                }else{
+                        const script = `<script>alert("Both passwords do not match").window.location.href = "/register"</script>`;
+                        res.send(script);
+                }
+        }catch(error){
+                res.status(400);
+                res.send(error);
+        }
+});
 
-			const registered = await registerUser.save();
+
+
+//TO LOGIN
+app.post('/login', async(req,res)=>{
+	try{
+		const email = req.body.Email;
+		const password = req.body.Password;
+
+		const useremail = await User.findOne({Email: email});
+
+		const id = req.body._id;
+		const eachUser = User.findById(id);
+
+		if(useremail.Password === password){
 			res.status(201);
-			res.send(req.body.Firstname);
+			res.send(`<p>Welcome ${useremail.Firstname}, click <a href="#">here</a> to proceed to your dashboard</p>`);
 			res.end();
 		}else{
-			const script = `<script>alert("Both passwords do not match"); window.location.href = "/register"</script>`;
-			res.send(script);
+			res.send("passwords do not match");
 		}
 	}catch(error){
 		res.status(400);
-		res.send(error);
+		res.send("Invalid Email");
 	}
 });
+
+
 const PORT = process.env.PORT || 3030;
 app.listen(PORT, ()=>{
 	console.log(`APP is listening on port ${PORT}!`);

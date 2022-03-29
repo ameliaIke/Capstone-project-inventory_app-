@@ -17,7 +17,7 @@ const userSchema = new Schema(
 			type: Schema.Types.Mixed,
 			required: true,
 		},
-		PhoneNumber:{
+		Phonenumber:{
 			type: Number,
 			maxLength: 11
 		},
@@ -27,7 +27,6 @@ const userSchema = new Schema(
 		},
 		DOB:{
 			type: Date,
-			required: true
 		},
 		Address:{
 			type: String,
@@ -44,15 +43,20 @@ const userSchema = new Schema(
 			maxLength: 30,
 			required: true,
 		},
+		Country:{
+			type: String,
+			maxLength: 30,
+			required: true,
+		},
 		Password:{
 			type: Schema.Types.Mixed,
 			required: true,
-			minLength: 20
+			maxLength: 20
 		},
 		ConfirmPassword:{
 			type: Schema.Types.Mixed,
 			required: true,
-			minLength: 20
+			maxLength: 20
 		},
 	},
 	{
